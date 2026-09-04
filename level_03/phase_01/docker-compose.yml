@@ -13,7 +13,7 @@ services:
 
   # Build the backend image once
   server1:
-    build: ./phase_01/backend
+    build: ./backend
     image: my-backend:latest
     environment:
       - SERVER_NAME=Server 1
@@ -35,4 +35,4 @@ services:
 
   # Custom Backend (Server 4)
   server4:
-    build: ./phase_01/CustomBackend
+    build: ./CustomBackend
