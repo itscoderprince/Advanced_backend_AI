@@ -1,0 +1,32 @@
+{
+  "name": "redis-learning-series-phase-1",
+  "version": "1.0.0",
+  "description": "Redis Learning Series - Phase 1: Caching with Redis, Express, and MongoDB",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "seed": "node seed.js",
+    "worker": "node lib/worker.js"
+  },
+  "keywords": [
+    "redis",
+    "caching",
+    "express",
+    "mongodb",
+    "mongoose",
+    "nodejs",
+    "learning-series"
+  ],
+  "author": "",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "bullmq": "^6.3.4",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "ioredis": "^6.0.0",
+    "mongoose": "^9.9.4",
+    "nodemon": "^3.1.14"
+  }
+}
