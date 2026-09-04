@@ -17,10 +17,6 @@ services:
     environment:
       - PORT=8000
       - GATEWAY_NAME=Gateway 1
-      - AUTH_SERVICE_URL=http://auth:1000
-      - PRODUCTS_SERVICE_URL=http://products:2000
-      - ORDERS_SERVICE_URL=http://orders:3000
-      - PAYMENTS_SERVICE_URL=http://payments:4000
     depends_on:
       - auth
       - products
@@ -35,10 +31,6 @@ services:
     environment:
       - PORT=8000
       - GATEWAY_NAME=Gateway 2
-      - AUTH_SERVICE_URL=http://auth:1000
-      - PRODUCTS_SERVICE_URL=http://products:2000
-      - ORDERS_SERVICE_URL=http://orders:3000
-      - PAYMENTS_SERVICE_URL=http://payments:4000
 
   # Microservice: Auth
   auth:

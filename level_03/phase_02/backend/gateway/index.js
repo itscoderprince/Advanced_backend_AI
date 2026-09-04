@@ -17,11 +17,11 @@ app.get("/", (req, res) => {
   });
 });
 
-// Forward to microservices (via Docker service names or localhost)
-app.use("/auth", proxy(process.env.AUTH_SERVICE_URL || "http://localhost:1000"));
-app.use("/products", proxy(process.env.PRODUCTS_SERVICE_URL || "http://localhost:2000"));
-app.use("/orders", proxy(process.env.ORDERS_SERVICE_URL || "http://localhost:3000"));
-app.use("/payments", proxy(process.env.PAYMENTS_SERVICE_URL || "http://localhost:4000"));
+// Forward to microservices using Docker container service names
+app.use("/auth", proxy("http://auth:1000"));
+app.use("/products", proxy("http://products:2000"));
+app.use("/orders", proxy("http://orders:3000"));
+app.use("/payments", proxy("http://payments:4000"));
 
 app.listen(PORT, () => {
   console.log(`🌐 ${GATEWAY_NAME} is running on http://localhost:${PORT}`);
