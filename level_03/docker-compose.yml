@@ -1,0 +1,38 @@
+services:
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8000:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - server1
+      - server2
+      - server3
+      - server4
+
+  # Build the backend image once
+  server1:
+    build: ./phase_01/backend
+    image: my-backend:latest
+    environment:
+      - SERVER_NAME=Server 1
+
+  # Re-use the same image instantly without rebuilding!
+  server2:
+    image: my-backend:latest
+    depends_on:
+      - server1
+    environment:
+      - SERVER_NAME=Server 2
+
+  server3:
+    image: my-backend:latest
+    depends_on:
+      - server1
+    environment:
+      - SERVER_NAME=Server 3
+
+  # Custom Backend (Server 4)
+  server4:
+    build: ./phase_01/CustomBackend
