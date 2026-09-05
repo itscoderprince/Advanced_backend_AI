@@ -161,7 +161,7 @@ app.post("/ai/translate", async (req, res) => {
     const aiMsg = await llm.invoke([
       {
         role: "system",
-        content: "You are a helpful assistant that translates English to French. Translate the user sentence.",
+        content: "You are a helpful assistant that translates English to hindi. Translate the user sentence.",
       },
       {
         role: "user",

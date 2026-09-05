@@ -1,0 +1,148 @@
+# 🤖 AI Engineering Roadmap — Your Progress Checklist
+
+> Based on your actual codebase: [`level_04/index.js`](file:///w:/AI%20Projects/level_04/index.js)
+> ✅ = Learned & Coded it | ⬜ = Next to Learn
+
+---
+
+## 🟢 BASIC — Foundation (Level 04 Complete)
+
+### Environment & Project Setup
+- [x] `dotenv` — Load secrets from `.env` (`process.env.GROQ_API_KEY`)
+- [x] `.gitignore` — Prevent `.env` and `node_modules/` from being pushed to GitHub
+- [x] `"type": "module"` in `package.json` — Use `import` instead of `require` (ESM)
+- [x] `nodemon` — Auto-restart server on file change (`npm run dev`)
+
+### Express.js Backend
+- [x] `express()` — Creating an HTTP server
+- [x] `app.use(express.json())` — Parse JSON request bodies
+- [x] `app.post("/route", async (req, res) => {})` — Create POST API endpoints
+- [x] `req.body` — Read data sent by the client
+- [x] `res.status(200).json({})` — Send structured JSON responses
+- [x] `res.status(400)` / `res.status(500)` — Proper HTTP error codes
+- [x] Input validation (`if (!input) return res.status(400)...`)
+- [x] `try / catch` — Error handling to prevent server crashes
+- [x] `app.listen(PORT, () => {})` — Start the server on a port
+
+### AI Fundamentals
+- [x] What is an LLM (Large Language Model)?
+- [x] What is an API Key and why it must be secret
+- [x] What is a `temperature` parameter? (0 = strict, 0.7 = balanced, 1+ = creative)
+- [x] What is `maxRetries`? (auto-retry on network failures)
+
+### Direct SDK — `@google/genai` (Step 1)
+- [x] `new GoogleGenAI({ apiKey })` — Initialize the client
+- [x] `ai.models.generateContent({ model, contents })` — Call the model
+- [x] `response.text` — Read the AI output
+- [x] `config: { systemInstruction: "..." }` — Set AI persona/rules
+- [x] Why `role: "system"` does NOT work inside `contents[]` in the raw Google SDK
+
+---
+
+## 🟡 INTERMEDIATE — LangChain & Prompt Engineering
+
+### LangChain Abstraction (Steps 2 & 3)
+- [x] Why use LangChain? (swap any model in 1 line — Gemini → Groq → OpenAI)
+- [x] `new ChatGoogleGenerativeAI({ apiKey, model })` — LangChain + Gemini
+- [x] `new ChatGroq({ apiKey, model })` — LangChain + Groq
+- [x] `llm.invoke(input)` — The universal call method (same for all providers)
+- [x] `response.content` — Read output from LangChain (NOT `.text`)
+- [x] Variable shadowing bug — Never name AI response `res` (shadows Express `res`)
+
+### Multi-Message Architecture (Step 4) ← Core Production Pattern
+- [x] `role: "system"` — Developer-written rules & AI persona (hidden from users)
+- [x] `role: "user"` — Dynamic end-user input from `req.body`
+- [x] `role: "assistant"` — What it is (past AI responses for chat memory)
+- [x] Passing an ARRAY `[{ role, content }, ...]` instead of a plain string
+- [x] How `system` prompt controls AI behavior (your translate-to-French vs Hindi experiment)
+- [x] Few-Shot Prompting (giving examples inside the system prompt to guide the model)
+
+### Prompt Engineering Basics
+- [x] Writing multi-line system prompts with backtick template strings
+- [x] Using numbered rules inside system prompt for strict AI behavior
+- [x] Understanding that system prompt is hardcoded in backend — users never see it
+
+### Groq / LPU Concept
+- [x] What is Groq? (LPU — Language Processing Unit, 500+ tokens/sec)
+- [x] Open-source models via Groq (`openai/gpt-oss-120b`, Llama, etc.)
+- [x] When to prefer Groq over Gemini (speed vs. quality trade-off)
+
+---
+
+## 🔴 ADVANCED — Next Topics to Learn
+
+### Structured Outputs (Most Important Next Step)
+- [ ] `zod` schema library — Define exact output shapes (`z.object({...})`)
+- [ ] `llm.withStructuredOutput(schema)` — Force the model to always return valid JSON
+- [ ] No more manually parsing strings — AI returns a real JS object
+- [ ] Real use case: Save AI response directly to a database
+
+### Streaming (How ChatGPT types word-by-word)
+- [ ] `llm.stream(input)` — Stream tokens as they are generated
+- [ ] Server-Sent Events (SSE) — Push tokens to the frontend in real-time
+- [ ] `res.setHeader("Content-Type", "text/event-stream")` — SSE endpoint in Express
+
+### Memory & Chat History (Multi-Turn Conversations)
+- [ ] Storing `[{ role, content }]` arrays in a database (Redis / PostgreSQL)
+- [ ] Loading past messages and appending them before each new AI call
+- [ ] Session management — Associate chat history with a `userId` or `sessionId`
+- [ ] `ConversationBufferMemory` in LangChain
+
+### RAG — Retrieval-Augmented Generation (Teach AI Your Own Data)
+- [ ] What is a Vector Database? (Pinecone, pgvector, Chroma)
+- [ ] What is an Embedding? (turning text into numbers)
+- [ ] `OpenAIEmbeddings` / `GoogleGenerativeAIEmbeddings` — Generate embeddings
+- [ ] Upload your own PDF/docs and let the AI answer questions from them
+- [ ] Full RAG pipeline: Embed → Store → Retrieve → Inject into system prompt
+
+### Tool Calling / Function Calling (This Makes It an "AGENT")
+- [ ] Defining a `tool()` in LangChain with a name, description, and async function
+- [ ] `llm.bindTools([tool1, tool2])` — Give the AI "hands" to call your backend functions
+- [ ] AI decides WHEN to call a tool vs. when to answer directly
+- [ ] Real use case: AI calls `checkOrderStatus()` or `searchDatabase()` automatically
+
+### LangChain Agents & Chains
+- [ ] What is a Chain? (sequence of LLM calls)
+- [ ] What is an Agent? (LLM that loops: Think → Act → Observe → Repeat)
+- [ ] `createReactAgent()` — ReAct pattern (Reason + Act)
+- [ ] LangGraph — Build complex multi-step agent workflows as a graph
+- [ ] Multi-Agent systems (one AI calls another AI)
+
+### Security & Production Hardening
+- [ ] Prompt Injection attacks — Users trying to override system prompts
+- [ ] Rate limiting with `express-rate-limit` — Prevent API abuse
+- [ ] Input sanitization before sending to AI
+- [ ] Token usage tracking — Know how much each request costs
+
+### Observability & Monitoring
+- [ ] LangSmith — Trace every LLM call, see inputs/outputs, debug failures
+- [ ] Token cost tracking (`usage.promptTokens`, `usage.completionTokens`)
+- [ ] Logging middleware in Express for every AI request
+
+### Deployment
+- [ ] Dockerizing your Node.js AI server
+- [ ] Deploying to Railway / Render / AWS
+- [ ] Environment variable management in cloud (not `.env` files)
+- [ ] CI/CD pipeline — Auto-deploy when you push to GitHub
+
+---
+
+## 📊 Overall Progress
+
+| Level | Topics | Done | Remaining |
+| :--- | :---: | :---: | :---: |
+| 🟢 **Basic** | 23 | **23** | 0 |
+| 🟡 **Intermediate** | 19 | **19** | 0 |
+| 🔴 **Advanced** | 30 | **0** | 30 |
+| **Total** | **72** | **42** | **30** |
+
+```
+Progress: ████████████████░░░░░░░░░░░░░░  42 / 72 topics (58%)
+```
+
+> [!TIP]
+> **Recommended Next Step:** Start with **Structured Outputs (Zod)** — it is the most immediately useful advanced skill and builds directly on what you already know from Step 4.
+
+> [!NOTE]
+> **Then move to:** Streaming → Memory → Tool Calling → RAG → Agents
+> This is the exact sequence most production AI backend engineers follow.
