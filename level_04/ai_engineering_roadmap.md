@@ -83,10 +83,10 @@
 - [ ] `res.setHeader("Content-Type", "text/event-stream")` — SSE endpoint in Express
 
 ### Memory & Chat History (Multi-Turn Conversations)
-- [ ] Storing `[{ role, content }]` arrays in a database (Redis / PostgreSQL)
-- [ ] Loading past messages and appending them before each new AI call
-- [ ] Session management — Associate chat history with a `userId` or `sessionId`
-- [ ] `ConversationBufferMemory` in LangChain
+- [x] Session management — Associate chat history with a `thread_id` via `configurable: { thread_id }`
+- [x] In-Memory Checkpointing — `MemorySaver` in LangGraph auto-saves & restores message history per thread
+- [ ] Storing `[{ role, content }]` arrays in an external database (Redis / PostgreSQL)
+- [ ] `ConversationBufferMemory` in legacy LangChain
 
 ### RAG — Retrieval-Augmented Generation (Teach AI Your Own Data)
 - [ ] What is a Vector Database? (Pinecone, pgvector, Chroma)
@@ -96,16 +96,22 @@
 - [ ] Full RAG pipeline: Embed → Store → Retrieve → Inject into system prompt
 
 ### Tool Calling / Function Calling (This Makes It an "AGENT")
-- [ ] Defining a `tool()` in LangChain with a name, description, and async function
-- [ ] `llm.bindTools([tool1, tool2])` — Give the AI "hands" to call your backend functions
-- [ ] AI decides WHEN to call a tool vs. when to answer directly
-- [ ] Real use case: AI calls `checkOrderStatus()` or `searchDatabase()` automatically
+- [x] `llm.bindTools([tool1, tool2])` — Give the AI "hands" to call external/backend tools (Groq + TavilySearch)
+- [x] `ToolNode` from `@langchain/langgraph/prebuilt` — Prebuilt node to auto-execute tool calls
+- [x] Web Search Tool Integration — Real-time web retrieval via `@langchain/tavily` (`TavilySearch`)
+- [x] AI decides WHEN to call a tool vs. when to answer directly (Dynamic routing based on `tool_calls`)
+- [x] Rate Limit & Token Tuning for Tools — Optimized Groq TPM limits via model selection & `maxResults`
+- [ ] Defining a custom `tool()` in LangChain with a schema, name, and custom async function
+- [ ] Real use case: AI calls custom database / business logic tool (`checkOrderStatus()` or `searchDatabase()`)
 
 ### LangChain Agents & Chains
-- [ ] What is a Chain? (sequence of LLM calls)
-- [ ] What is an Agent? (LLM that loops: Think → Act → Observe → Repeat)
+- [x] What is an Agent? (LLM that loops: Think → Act → Observe → Repeat)
+- [x] LangGraph — Build cyclic multi-step agent workflows as a graph (`StateGraph`, `addNode`, `addEdge`, `compile`)
+- [x] LangGraph Custom State — Defining custom state channels with `Annotation.Root()`
+- [x] LangGraph Prebuilt State — Chat-driven flow with `MessagesAnnotation` and automatic message reducer
+- [x] Conditional Edges — Dynamic routing with `addConditionalEdges("agent", shouldContinue)`
+- [ ] What is a Chain? (sequence of LLM calls via LCEL / RunnableSequence)
 - [ ] `createReactAgent()` — ReAct pattern (Reason + Act)
-- [ ] LangGraph — Build complex multi-step agent workflows as a graph
 - [ ] Multi-Agent systems (one AI calls another AI)
 
 ### Security & Production Hardening
@@ -133,16 +139,16 @@
 | :--- | :---: | :---: | :---: |
 | 🟢 **Basic** | 23 | **23** | 0 |
 | 🟡 **Intermediate** | 19 | **19** | 0 |
-| 🔴 **Advanced** | 30 | **0** | 30 |
-| **Total** | **72** | **42** | **30** |
+| 🔴 **Advanced** | 42 | **12** | 30 |
+| **Total** | **84** | **54** | **30** |
 
 ```
-Progress: ████████████████░░░░░░░░░░░░░░  42 / 72 topics (58%)
+Progress: █████████████████████░░░░░░░░░  54 / 84 topics (64%)
 ```
 
 > [!TIP]
-> **Recommended Next Step:** Start with **Structured Outputs (Zod)** — it is the most immediately useful advanced skill and builds directly on what you already know from Step 4.
+> **Recommended Next Step:** Start with **Structured Outputs (Zod)** — it is the most immediately useful advanced skill and pairs naturally with your LangGraph agents to enforce structured JSON responses.
 
 > [!NOTE]
-> **Then move to:** Streaming → Memory → Tool Calling → RAG → Agents
-> This is the exact sequence most production AI backend engineers follow.
+> **Then move to:** Streaming → Persistent Memory (Redis / DB) → Custom Tools → RAG → Multi-Agent
+> This builds directly upon the LangGraph foundation you now have running.
