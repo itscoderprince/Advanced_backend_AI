@@ -22,11 +22,18 @@ This repository contains practical implementations and learning phases covering 
   - Fast, temporary storage of one-time passwords (`otp:<email>`) with 60s auto-expiration.
 - **Redis Rate Limiter:**
   - IP-based sliding window rate limiter middleware (`redis.incr` & `redis.expire`).
-- **BullMQ Background Queues:**
-  - Decoupled asynchronous email processing (`Queue` and `Worker`).
-  - Non-blocking API requests for long-running jobs.
+### 🔹 Level 03: System Design & Scaling
+- **Phase 01:** Nginx Reverse Proxy & Round-Robin Load Balancing across multiple Node.js backend instances.
+- **Phase 02:** API Gateway & Microservices architecture.
 
----
+### 🔹 Level 04: AI, LLM & Agent Engineering
+- **Phase 01:**
+  - Direct SDK vs. LangChain abstraction (`@google/genai`, `@langchain/google-genai`, `@langchain/groq`).
+  - Multi-message prompt engineering (system persona, user input, few-shot translation).
+  - LangGraph Cyclic Agents: Custom state (`Annotation.Root`) & Prebuilt chat state (`MessagesAnnotation`).
+  - Tool Calling (`ToolNode` + `TavilySearch`) and dynamic routing (`shouldContinue`).
+  - Conversational memory & checkpointing (`MemorySaver` + `thread_id`).
+- **Phase 02:** Advanced Agent Architecture, Structured Outputs (Zod), Streaming (SSE), Persistent Storage & Multi-Agent systems.
 
 ## 🛠️ Getting Started
 
