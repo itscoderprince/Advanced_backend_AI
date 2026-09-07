@@ -1,0 +1,26 @@
+### 1. Health Check
+GET http://localhost:5000/
+
+### 2. Test Grocery Store RAG (Product & Price Query)
+POST http://localhost:5000/ai
+Content-Type: application/json
+
+{
+  "prompt": "Which snacks are available and what are their prices?"
+}
+
+### 3. Test Specific Item Price
+POST http://localhost:5000/ai
+Content-Type: application/json
+
+{
+  "prompt": "What is the price of Bru Beverages?"
+}
+
+### 4. Test Anti-Hallucination Guardrail (Item not in catalog)
+POST http://localhost:5000/ai
+Content-Type: application/json
+
+{
+  "prompt": "Do you sell laptops or smartphones?"
+}
