@@ -72,9 +72,9 @@
 ## 🔴 ADVANCED — Next Topics to Learn
 
 ### Structured Outputs (Most Important Next Step)
-- [ ] `zod` schema library — Define exact output shapes (`z.object({...})`)
-- [ ] `llm.withStructuredOutput(schema)` — Force the model to always return valid JSON
-- [ ] No more manually parsing strings — AI returns a real JS object
+- [x] `zod` schema library — Define exact data validation shapes (`z.object({...})`) & backend validation
+- [ ] `llm.withStructuredOutput(schema)` — Force the model to always return valid JSON matching Zod schema
+- [ ] No more manually parsing strings — AI returns a real typed JS object
 - [ ] Real use case: Save AI response directly to a database
 
 ### Streaming (How ChatGPT types word-by-word)
@@ -139,11 +139,11 @@
 | :--- | :---: | :---: | :---: |
 | 🟢 **Basic** | 23 | **23** | 0 |
 | 🟡 **Intermediate** | 19 | **19** | 0 |
-| 🔴 **Advanced** | 42 | **17** | 25 |
-| **Total** | **84** | **59** | **25** |
+| 🔴 **Advanced** | 42 | **18** | 24 |
+| **Total** | **84** | **60** | **24** |
 
 ```
-Progress: ███████████████████████░░░░░░░  59 / 84 topics (70%)
+Progress: ████████████████████████░░░░░░  60 / 84 topics (71%)
 ```
 
 > [!TIP]
