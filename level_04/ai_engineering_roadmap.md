@@ -89,11 +89,11 @@
 - [ ] `ConversationBufferMemory` in legacy LangChain
 
 ### RAG — Retrieval-Augmented Generation (Teach AI Your Own Data)
-- [ ] What is a Vector Database? (Pinecone, pgvector, Chroma)
-- [ ] What is an Embedding? (turning text into numbers)
-- [ ] `OpenAIEmbeddings` / `GoogleGenerativeAIEmbeddings` — Generate embeddings
-- [ ] Upload your own PDF/docs and let the AI answer questions from them
-- [ ] Full RAG pipeline: Embed → Store → Retrieve → Inject into system prompt
+- [x] What is a Vector Database? (Connected and queried cloud Qdrant vector database via `@langchain/qdrant`)
+- [x] What is an Embedding? (Converting text chunks into 3072-dimensional dense vector numbers)
+- [x] `GoogleGenerativeAIEmbeddings` — Generated embeddings via Gemini (`gemini-embedding-001`)
+- [x] Parsing & Chunking PDFs (`pdf-parse` + `RecursiveCharacterTextSplitter` with `chunkOverlap`)
+- [x] Full Production RAG Pipeline: Embed → Store in Qdrant → Similarity Search → Context Injection → Grounded Generation
 
 ### Tool Calling / Function Calling (This Makes It an "AGENT")
 - [x] `llm.bindTools([tool1, tool2])` — Give the AI "hands" to call external/backend tools (Groq + TavilySearch)
@@ -139,11 +139,11 @@
 | :--- | :---: | :---: | :---: |
 | 🟢 **Basic** | 23 | **23** | 0 |
 | 🟡 **Intermediate** | 19 | **19** | 0 |
-| 🔴 **Advanced** | 42 | **12** | 30 |
-| **Total** | **84** | **54** | **30** |
+| 🔴 **Advanced** | 42 | **17** | 25 |
+| **Total** | **84** | **59** | **25** |
 
 ```
-Progress: █████████████████████░░░░░░░░░  54 / 84 topics (64%)
+Progress: ███████████████████████░░░░░░░  59 / 84 topics (70%)
 ```
 
 > [!TIP]

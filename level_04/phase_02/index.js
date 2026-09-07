@@ -54,7 +54,7 @@ const loadAndSplitPDF = async (filePath) => {
   return docs;
 };
 
-loadAndSplitPDF("./grocery_store.pdf");
+// loadAndSplitPDF("./grocery_store.pdf");
 
 // ─── 5. Health Check ─────────────────────────────────────────────────────────
 app.get("/", (req, res) => {
@@ -75,12 +75,32 @@ app.post("/ai", async (req, res) => {
   }
 
   try {
-    const response = await llm.invoke(prompt);
+    const docs = await vectorStore.similaritySearch(prompt, 5);
+    const context = docs.map((d) => d.pageContent).join("\n\n");
+
+    const response = await llm.invoke([
+      {
+        role: "system",
+        content:
+          "You are a helpful and accurate assistant.\n" +
+          "Answer the user's question using ONLY the provided context below.\n\n" +
+          "Rules:\n" +
+          "- Rely strictly on the facts in the context. Never invent or assume details.\n" +
+          "- If the answer is not in the context, reply: 'I cannot find that information in the provided document.'\n" +
+          "- Keep your answer factual, direct, and concise.\n\n" +
+          `<context>\n${context}\n</context>`,
+      },
+      {
+        role: "user",
+        content: prompt,
+      },
+    ]);
 
     return res.status(200).json({
       success: true,
       answer: response.content,
     });
+
   } catch (error) {
     console.error("❌ LLM Error:", error.message);
     return res.status(500).json({ success: false, error: error.message });

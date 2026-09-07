@@ -1,43 +1,43 @@
-# Level 04 — Phase 02: Advanced AI, RAG & Agent Architecture 🚀
+# Level 04 — Phase 02: Advanced AI, RAG & Vector Databases 🚀
 
 Welcome to **Phase 02** of Level 04!
 
-In this phase, we build **RAG (Retrieval-Augmented Generation)**, structured outputs, streaming, and advanced multi-agent workflows.
+In this phase, we build a production-grade **RAG (Retrieval-Augmented Generation)** pipeline backed by **Qdrant Cloud Vector Database**, Google Gemini Embeddings, and Groq LPUs.
 
 ---
 
-## 🧠 RAG (Retrieval-Augmented Generation) Architecture
+## 🧠 Complete RAG Architecture
 
 ```
-                                  [ KNOWLEDGE BASE ]
-                                           │
-                                ┌──────────┴──────────┐
-                                ▼                     ▼
-                       Seed Company Docs        POST /rag/add
-                                │                     │
-                                └──────────┬──────────┘
-                                           │
-                                           ▼
-                            GoogleGenerativeAIEmbeddings
-                             (models/gemini-embedding-001)
-                                           │
-                                           ▼
-                                 [ In-Memory Vector Store ]
-                                  (Docs + 3072-dim Vectors)
-                                           │
-                                           │ Cosine Similarity
-                                           ▼
-   User Question ──► Embed Query ──► Top Matching Context
-                                           │
-                                           ▼
-                              Augmented System Prompt
-                        ("Answer using ONLY this context...")
-                                           │
-                                           ▼
-                                  ChatGroq (gpt-oss-20b)
-                                           │
-                                           ▼
-                                Grounded, Factual Answer!
+                          [ 20-Page Grocery Store PDF ]
+                                       │
+                                       ▼ (pdf-parse)
+                               Raw Text Stream
+                                       │
+                                       ▼ (RecursiveCharacterTextSplitter)
+                           50 Document Chunks
+                         (chunkSize: 1000, overlap: 200)
+                                       │
+                                       ▼ (GoogleGenerativeAIEmbeddings: gemini-embedding-001)
+                           3072-Dimensional Vectors
+                                       │
+                                       ▼
+                       [ Qdrant Cloud Vector Database ]
+                       (Collection: 'grocery_store')
+                                       │
+                                       │ similaritySearch(prompt, 5)
+                                       ▼
+User Prompt ──────────► Top 5 Retrieved Document Chunks
+                                       │
+                                       ▼
+                           Augmented System Prompt
+                  ("Answer strictly using ONLY this context...")
+                                       │
+                                       ▼
+                             ChatGroq (gpt-oss-20b)
+                                       │
+                                       ▼
+                            100% Grounded AI Answer!
 ```
 
 ---
@@ -46,22 +46,20 @@ In this phase, we build **RAG (Retrieval-Augmented Generation)**, structured out
 
 | Method & Route | Purpose | Sample Request Body | Sample Response |
 | :--- | :--- | :--- | :--- |
-| `GET /` | Health check & Vector Store status | *None* | `{"message": "...", "documentsInVectorStore": 4}` |
-| `POST /ai` | Standard LLM (Without RAG) | `{"prompt": "How much does Antigravity AI Pro cost?"}` | Generic/hallucinated answer |
-| `POST /rag/ask` | RAG Query with retrieved context | `{"question": "How much does Antigravity AI Pro cost?"}` | `{"answer": "Antigravity AI Pro costs $49/month", "similarityScore": "0.8182"}` |
-| `POST /rag/add` | Ingest new document into Vector Store | `{"text": "Office Wi-Fi password is FalconSecure99."}` | `{"success": true, "documentId": 5}` |
+| `GET /` | Health check & Server Status | *None* | `{"message": "🚀 Level 04 — Phase 02 Server is Live!"}` |
+| `POST /ai` | Production RAG Endpoint | `{"prompt": "Which snacks are available and what are their prices?"}` | `{"success": true, "answer": "Salted Peanuts (Rs 69), Potato Chips (Rs 30)..."}` |
 
 ---
 
 ## 🎯 Phase 02 Progress Checklist
 
-- [x] **Embeddings Generation:** Google `models/gemini-embedding-001` converting text into 3072-dimensional vector arrays
-- [x] **In-Memory Vector Store:** Document storage with pre-computed vector embeddings
-- [x] **Cosine Similarity Engine:** Mathematical vector similarity matching
-- [x] **RAG Retrieval & Prompt Augmentation (`POST /rag/ask`):** Finding top context and injecting into LLM
-- [x] **Dynamic Document Ingestion (`POST /rag/add`):** Real-time embedding and vector store updates
-- [ ] **Document Chunking & Text Splitters:** Handling large files and PDFs (`RecursiveCharacterTextSplitter`)
+- [x] **PDF Document Parsing (`pdf-parse`):** Extracting raw text from complex multi-page PDF catalogs
+- [x] **Recursive Text Splitting (`@langchain/textsplitters`):** Dividing documents into 1000-character chunks with 200-character overlap
+- [x] **Dense Vector Embeddings (`@langchain/google-genai`):** Generating 3072-dim embeddings via `gemini-embedding-001`
+- [x] **Cloud Vector Database (`@langchain/qdrant`):** Connected to remote Qdrant cluster for persistent vector indexing
+- [x] **Vector Similarity Search:** Querying Qdrant for top-K matching chunks
+- [x] **Production Anti-Hallucination Guardrail:** `<context>` isolation + strict negative response rules
+- [x] **Grounded LLM Generation:** Ultra-fast sub-second answers using Groq LPU (`openai/gpt-oss-20b`)
 - [ ] **Structured Outputs (Zod):** Enforcing strict JSON output schemas via `llm.withStructuredOutput()`
 - [ ] **Token Streaming & SSE:** Real-time token streaming to clients using Server-Sent Events
-- [ ] **Persistent Vector Database:** Pinecone / Chroma / pgvector storage
 - [ ] **Multi-Agent Systems:** Specialized subagents collaborating under a supervisor agent
